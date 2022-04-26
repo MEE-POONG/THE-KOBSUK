@@ -1,0 +1,417 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="KOBSUKDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="c_id" />
+          </Key>
+          <Property Name="c_id" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="c_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="c_tell" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="or_id" />
+          </Key>
+          <Property Name="or_id" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="c_id" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="or_data" Type="datetime" Nullable="false" />
+          <Property Name="or_total" Type="decimal" Precision="7" Scale="2" Nullable="false" />
+          <Property Name="or_payment" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="or_sent" Type="nvarchar" MaxLength="20" />
+          <Property Name="or_address" Type="nvarchar" MaxLength="100" />
+          <Property Name="or_delivery_day" Type="decimal" Precision="7" Scale="2" />
+          <Property Name="or_status" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Order_datail">
+          <Key>
+            <PropertyRef Name="or_id" />
+          </Key>
+          <Property Name="or_id" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="p_id" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="ord_price" Type="decimal" Precision="7" Scale="2" Nullable="false" />
+          <Property Name="ord_amount" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="ord_sum" Type="decimal" Precision="7" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="m_id" />
+          </Key>
+          <Property Name="m_id" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="or_id" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="m_date" Type="datetime" Nullable="false" />
+          <Property Name="m_deposit" Type="decimal" Precision="7" Scale="2" Nullable="false" />
+          <Property Name="m_total" Type="decimal" Precision="7" Scale="2" Nullable="false" />
+          <Property Name="m_owe" Type="decimal" Precision="7" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="p_id" />
+          </Key>
+          <Property Name="p_id" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="t_id" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="p_name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="p_size" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="p_price" Type="decimal" Precision="7" Scale="2" Nullable="false" />
+          <Property Name="p_detail" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Type">
+          <Key>
+            <PropertyRef Name="t_id" />
+          </Key>
+          <Property Name="t_id" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="t_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Order_datail_ToTable_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Order_datail" Type="Self.Order_datail" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="or_id" />
+            </Principal>
+            <Dependent Role="Order_datail">
+              <PropertyRef Name="or_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_datail_ToTable_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Order_datail" Type="Self.Order_datail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="p_id" />
+            </Principal>
+            <Dependent Role="Order_datail">
+              <PropertyRef Name="p_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_ToTable_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="c_id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="c_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payment_ToTable_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="or_id" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="or_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_To_Type">
+          <End Role="Type" Type="Self.Type" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type">
+              <PropertyRef Name="t_id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="t_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KOBSUKDBModelStoreContainer">
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order_datail" EntityType="Self.Order_datail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Type" EntityType="Self.Type" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Order_datail_ToTable_Order" Association="Self.FK_Order_datail_ToTable_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Order_datail" EntitySet="Order_datail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_datail_ToTable_Product" Association="Self.FK_Order_datail_ToTable_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Order_datail" EntitySet="Order_datail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_ToTable_Customer" Association="Self.FK_Order_ToTable_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payment_ToTable_Order" Association="Self.FK_Payment_ToTable_Order">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="Payment" EntitySet="Payment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_To_Type" Association="Self.FK_Product_To_Type">
+            <End Role="Type" EntitySet="Type" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="KOBSUKDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="c_id" />
+          </Key>
+          <Property Name="c_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="c_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="c_tell" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Order_ToTable_Customer" FromRole="Customer" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="or_id" />
+          </Key>
+          <Property Name="or_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="c_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="or_data" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="or_total" Type="Decimal" Precision="7" Scale="2" Nullable="false" />
+          <Property Name="or_payment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="or_sent" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="or_address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="or_delivery_day" Type="Decimal" Precision="7" Scale="2" />
+          <Property Name="or_status" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Order_ToTable_Customer" FromRole="Order" ToRole="Customer" />
+          <NavigationProperty Name="Order_datail" Relationship="Self.FK_Order_datail_ToTable_Order" FromRole="Order" ToRole="Order_datail" />
+          <NavigationProperty Name="Payments" Relationship="Self.FK_Payment_ToTable_Order" FromRole="Order" ToRole="Payment" />
+        </EntityType>
+        <EntityType Name="Order_datail">
+          <Key>
+            <PropertyRef Name="or_id" />
+          </Key>
+          <Property Name="or_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="p_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ord_price" Type="Decimal" Precision="7" Scale="2" Nullable="false" />
+          <Property Name="ord_amount" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ord_sum" Type="Decimal" Precision="7" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_Order_datail_ToTable_Order" FromRole="Order_datail" ToRole="Order" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Order_datail_ToTable_Product" FromRole="Order_datail" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="m_id" />
+          </Key>
+          <Property Name="m_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="or_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="m_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="m_deposit" Type="Decimal" Precision="7" Scale="2" Nullable="false" />
+          <Property Name="m_total" Type="Decimal" Precision="7" Scale="2" Nullable="false" />
+          <Property Name="m_owe" Type="Decimal" Precision="7" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK_Payment_ToTable_Order" FromRole="Payment" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="p_id" />
+          </Key>
+          <Property Name="p_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="t_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="p_name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="p_size" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="p_price" Type="Decimal" Precision="7" Scale="2" Nullable="false" />
+          <Property Name="p_detail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Order_datail" Relationship="Self.FK_Order_datail_ToTable_Product" FromRole="Product" ToRole="Order_datail" />
+          <NavigationProperty Name="Type" Relationship="Self.FK_Product_To_Type" FromRole="Product" ToRole="Type" />
+        </EntityType>
+        <EntityType Name="Type">
+          <Key>
+            <PropertyRef Name="t_id" />
+          </Key>
+          <Property Name="t_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="t_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Product_To_Type" FromRole="Type" ToRole="Product" />
+        </EntityType>
+        <Association Name="FK_Order_ToTable_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="c_id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="c_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_datail_ToTable_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Order_datail" Type="Self.Order_datail" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="or_id" />
+            </Principal>
+            <Dependent Role="Order_datail">
+              <PropertyRef Name="or_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Payment_ToTable_Order">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="Payment" Type="Self.Payment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="or_id" />
+            </Principal>
+            <Dependent Role="Payment">
+              <PropertyRef Name="or_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Order_datail_ToTable_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Order_datail" Type="Self.Order_datail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="p_id" />
+            </Principal>
+            <Dependent Role="Order_datail">
+              <PropertyRef Name="p_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_To_Type">
+          <End Role="Type" Type="Self.Type" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type">
+              <PropertyRef Name="t_id" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="t_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KOBSUKDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="Order_datail" EntityType="Self.Order_datail" />
+          <EntitySet Name="Payments" EntityType="Self.Payment" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="Types" EntityType="Self.Type" />
+          <AssociationSet Name="FK_Order_ToTable_Customer" Association="Self.FK_Order_ToTable_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_datail_ToTable_Order" Association="Self.FK_Order_datail_ToTable_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Order_datail" EntitySet="Order_datail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Payment_ToTable_Order" Association="Self.FK_Payment_ToTable_Order">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Payment" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Order_datail_ToTable_Product" Association="Self.FK_Order_datail_ToTable_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Order_datail" EntitySet="Order_datail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_To_Type" Association="Self.FK_Product_To_Type">
+            <End Role="Type" EntitySet="Types" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="KOBSUKDBModelStoreContainer" CdmEntityContainer="KOBSUKDBEntities">
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="KOBSUKDBModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="c_id" ColumnName="c_id" />
+                <ScalarProperty Name="c_name" ColumnName="c_name" />
+                <ScalarProperty Name="c_tell" ColumnName="c_tell" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="KOBSUKDBModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="or_id" ColumnName="or_id" />
+                <ScalarProperty Name="c_id" ColumnName="c_id" />
+                <ScalarProperty Name="or_data" ColumnName="or_data" />
+                <ScalarProperty Name="or_total" ColumnName="or_total" />
+                <ScalarProperty Name="or_payment" ColumnName="or_payment" />
+                <ScalarProperty Name="or_sent" ColumnName="or_sent" />
+                <ScalarProperty Name="or_address" ColumnName="or_address" />
+                <ScalarProperty Name="or_delivery_day" ColumnName="or_delivery_day" />
+                <ScalarProperty Name="or_status" ColumnName="or_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order_datail">
+            <EntityTypeMapping TypeName="KOBSUKDBModel.Order_datail">
+              <MappingFragment StoreEntitySet="Order_datail">
+                <ScalarProperty Name="or_id" ColumnName="or_id" />
+                <ScalarProperty Name="p_id" ColumnName="p_id" />
+                <ScalarProperty Name="ord_price" ColumnName="ord_price" />
+                <ScalarProperty Name="ord_amount" ColumnName="ord_amount" />
+                <ScalarProperty Name="ord_sum" ColumnName="ord_sum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payments">
+            <EntityTypeMapping TypeName="KOBSUKDBModel.Payment">
+              <MappingFragment StoreEntitySet="Payment">
+                <ScalarProperty Name="m_id" ColumnName="m_id" />
+                <ScalarProperty Name="or_id" ColumnName="or_id" />
+                <ScalarProperty Name="m_date" ColumnName="m_date" />
+                <ScalarProperty Name="m_deposit" ColumnName="m_deposit" />
+                <ScalarProperty Name="m_total" ColumnName="m_total" />
+                <ScalarProperty Name="m_owe" ColumnName="m_owe" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="KOBSUKDBModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="p_id" ColumnName="p_id" />
+                <ScalarProperty Name="t_id" ColumnName="t_id" />
+                <ScalarProperty Name="p_name" ColumnName="p_name" />
+                <ScalarProperty Name="p_size" ColumnName="p_size" />
+                <ScalarProperty Name="p_price" ColumnName="p_price" />
+                <ScalarProperty Name="p_detail" ColumnName="p_detail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Types">
+            <EntityTypeMapping TypeName="KOBSUKDBModel.Type">
+              <MappingFragment StoreEntitySet="Type">
+                <ScalarProperty Name="t_id" ColumnName="t_id" />
+                <ScalarProperty Name="t_name" ColumnName="t_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
