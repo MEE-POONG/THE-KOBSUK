@@ -226,8 +226,10 @@
           <Key>
             <PropertyRef Name="t_id" />
           </Key>
-          <Property Name="t_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="t_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="t_id" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" >
+          </Property>
+          <Property Name="t_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" >
+          </Property>
           <NavigationProperty Name="Products" Relationship="Self.FK_Product_To_Type" FromRole="Type" ToRole="Product" />
         </EntityType>
         <Association Name="FK_Order_ToTable_Customer">

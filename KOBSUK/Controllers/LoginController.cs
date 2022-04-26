@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KOBSUK.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,29 +12,33 @@ namespace KOBSUK.Controllers
         // GET: Login
         public ActionResult Index()
         {
-            return View();
-        }
 
-        // GET: Login/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Login/Create
-        public ActionResult Create()
-        {
-            return View();
+            Session.RemoveAll();
+            var Username = Session["Username"];
+            if (Username == null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         // POST: Login/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Index(LoginClass model)
         {
             try
             {
                 // TODO: Add insert logic here
-
+                if (model.Username == "admin" && model.Password == "1234")
+                {
+                    Session["Username"] = model.Username.ToString();
+                    Session["password"] = model.Password.ToString();
+                    return RedirectToAction("Index", "Home");
+                }
+                ViewBag.errorMsg = "รหัสผ่านไม่ถูกต้อง";
                 return RedirectToAction("Index");
             }
             catch
@@ -42,48 +47,5 @@ namespace KOBSUK.Controllers
             }
         }
 
-        // GET: Login/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Login/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Login/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Login/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

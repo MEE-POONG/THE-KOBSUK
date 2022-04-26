@@ -10,7 +10,9 @@ namespace KOBSUK.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            var Username = Session["Username"];
+
+            return Username == null ? RedirectToAction("Index", "Login") : (ActionResult)View();
         }
 
         public ActionResult About()
