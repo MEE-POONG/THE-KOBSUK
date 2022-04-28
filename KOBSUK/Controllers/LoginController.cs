@@ -39,7 +39,7 @@ namespace KOBSUK.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 ViewBag.errorMsg = "รหัสผ่านไม่ถูกต้อง";
-                return RedirectToAction("Index");
+                return View();
             }
             catch
             {

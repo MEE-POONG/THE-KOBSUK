@@ -1,0 +1,89 @@
+﻿@model KOBSUK.Product
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section id="title">
+    <h2 class="d-flex justify-content-center">
+        แก้ไขข้อมูลสินค้า
+    </h2>
+</section>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.p_id)
+
+    <div class="form-group">
+
+        <label class="control-label col-md-2">รหัสสินค้า</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.p_id, new { htmlAttributes = new { @readonly = "readonly", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.p_id, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+
+        <label class="control-label col-md-2">ชื่อสินค้า</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.p_name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.p_name, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <label class="control-label col-md-2">ชื่อประเภทสินค้า</label>
+        <div class="col-md-10">
+            @Html.DropDownList("t_id", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.t_id, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <label class="control-label col-md-2">ขนาด</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.p_size, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.p_size, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <label class="control-label col-md-2">ราคา</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.p_price, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.p_price, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+
+        <label class="control-label col-md-2">รายละเอียด</label>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.p_detail, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.p_detail, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="บันทึก" class="btn btn-primary" />
+
+            @Html.ActionLink("ยกเลิก", "Index", null, new { @class = "btn btn-danger" })
+
+        </div>
+    </div>
+</div>
+}

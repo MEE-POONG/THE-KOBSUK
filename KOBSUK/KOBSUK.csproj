@@ -131,7 +131,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\ProductFromPageController.cs" />
     <Compile Include="Controllers\ProductTypeFormPageController.cs" />
+    <Compile Include="Controllers\UserFormController.cs" />
     <Compile Include="Customer.cs">
       <DependentUpon>KOBSUKModel.tt</DependentUpon>
     </Compile>
@@ -237,6 +239,16 @@
     <Content Include="Views\ProductTypeFormPage\Details.cshtml" />
     <Content Include="Views\ProductTypeFormPage\Edit.cshtml" />
     <Content Include="Views\ProductTypeFormPage\Index.cshtml" />
+    <Content Include="Views\ProductFromPage\Create.cshtml" />
+    <Content Include="Views\ProductFromPage\Delete.cshtml" />
+    <Content Include="Views\ProductFromPage\Details.cshtml" />
+    <Content Include="Views\ProductFromPage\Edit.cshtml" />
+    <Content Include="Views\ProductFromPage\Index.cshtml" />
+    <Content Include="Views\UserForm\Create.cshtml" />
+    <Content Include="Views\UserForm\Delete.cshtml" />
+    <Content Include="Views\UserForm\Details.cshtml" />
+    <Content Include="Views\UserForm\Edit.cshtml" />
+    <Content Include="Views\UserForm\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

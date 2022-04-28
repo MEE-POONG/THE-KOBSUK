@@ -1,0 +1,133 @@
+﻿@model IEnumerable<KOBSUK.Product>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section id="title">
+    <h2 class="d-flex justify-content-center">
+        บันทึกข้อมูลรายการสินค้า
+    </h2>
+</section>
+
+
+@using (Html.BeginForm("Create", "ProductFromPage", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <section id="form-production mt-5">
+        <div class="mb-3 mt-5 row">
+            <label class="col-5 col-form-label text-end">รหัสรายการสินค้า :</label>
+            <div class="col-7">
+                <input type="text" readonly class="form-control-plaintext" id="p_id" name="p_id" value="@ViewBag.last_id">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-5 col-form-label text-end">ชื่อรายการสินค้า :</label>
+            <div class="col-7">
+                <input type="text" class="form-control" id="p_name" name="p_name" value="">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-5 col-form-label text-end">ชื่อประเภทสินค้า :</label>
+            <div class="col-7">
+                @Html.DropDownList("t_id", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-5 col-form-label text-end">ขนาด :</label>
+            <div class="col-7">
+                <input type="text" class="form-control" id="p_size" name="p_size" value="">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-5 col-form-label text-end">ราคา :</label>
+            <div class="col-7">
+                <input type="text" class="form-control" id="p_price" name="p_price" value="">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-5 col-form-label text-end">รายละเอียด :</label>
+            <div class="col-7">
+                <input type="text" class="form-control" id="p_detail" name="p_detail" value="">
+            </div>
+        </div>
+
+
+        <div style="text-align: -webkit-center;">
+
+            <button class="btn btn-lg btn-primary" type="submit">บันทึก</button>
+
+            <button class="btn btn-lg btn-danger" type="reset">ยกเลิก</button>
+        </div>
+    </section>
+}
+
+@using (Html.BeginForm("Index", "ProductFromPage", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <section id="search">
+        <div class="input-group mb-3 d-flex justify-content-center mt-5">
+            <input type="text" id="Search" name="Search" class="form-control" placeholder="กรุณากรอกข้อมูลสินค้าที่ต้องการค้นหา" aria-label="กรุณากรอกข้อมูลสินค้าที่ต้องการค้นหา">
+            <button class="btn btn-outline-secondary" type="submit" id="button-search">ค้นหา</button>
+        </div>
+    </section>
+}
+<table class="table">
+    <tr>
+        <th>
+            รหัสรายการ
+        </th>
+        <th>
+            ชื่อรายการสินค้า
+        </th>
+        <th>
+            ชื่อประเภทสินค้า
+        </th>
+        <th>
+            ขนาด
+        </th>
+        <th>
+            ราคา
+        </th>
+        <th>
+            รายละเอียด
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.p_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.p_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type.t_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.p_size)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.p_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.p_detail)
+            </td>
+            <td>
+                @Html.ActionLink("แก้ไข", "Edit", new { id = item.p_id }) |
+                @Html.ActionLink("ลบ", "Delete", new { id = item.p_id })
+            </td>
+        </tr>
+    }
+
+</table>

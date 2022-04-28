@@ -1,0 +1,59 @@
+﻿@model KOBSUK.Product
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.p_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.p_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.p_size)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.p_size)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.p_price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.p_price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.p_detail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.p_detail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Type.t_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Type.t_name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.p_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

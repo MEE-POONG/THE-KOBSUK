@@ -1,0 +1,97 @@
+﻿@model IEnumerable<KOBSUK.Customer>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section id="title">
+    <h2 class="d-flex justify-content-center">
+        บันทึกข้อมูลลูกค้า
+    </h2>
+</section>
+
+
+@using (Html.BeginForm("Create", "UserForm", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <section id="form-production mt-5">
+        <div class="mb-3 mt-5 row">
+            <label class="col-5 col-form-label text-end">รหัสลูกค้า :</label>
+            <div class="col-7">
+                <input type="text" readonly class="form-control-plaintext" id="c_id" name="c_id" value="@ViewBag.last_id">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-5 col-form-label text-end">ชื่อลูกค้า :</label>
+            <div class="col-7">
+                <input type="text" class="form-control" id="c_name" name="c_name" value="">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-5 col-form-label text-end">เบอร์โทร :</label>
+            <div class="col-7">
+                <input type="text" class="form-control" id="c_tell" name="c_tell" value="">
+            </div>
+        </div>
+
+
+        <div style="text-align: -webkit-center;">
+
+            <button class="btn btn-lg btn-primary" type="submit">บันทึก</button>
+
+            <button class="btn btn-lg btn-danger" type="reset">ยกเลิก</button>
+        </div>
+    </section>
+}
+
+
+
+@using (Html.BeginForm("Index", "UserForm", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <section id="search">
+        <div class="input-group mb-3 d-flex justify-content-center mt-5">
+            <input type="text" id="Search" name="Search" class="form-control" placeholder="กรุณากรอกข้อมูลที่ต้องการค้นหา" aria-label="กรุณากรอกข้อมูลที่ต้องการค้นหา">
+            <button class="btn btn-outline-secondary" type="submit" id="button-search">ค้นหา</button>
+        </div>
+    </section>
+}
+
+
+<table class="table">
+    <tr>
+        <th>
+            รหัสลูกค้า
+        </th>
+        <th>
+            ชื่อลูกค้า
+        </th>
+        <th>
+            เบอร์โทร
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.c_id)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.c_name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.c_tell)
+    </td>
+    <td>
+        @Html.ActionLink("แก้ไข", "Edit", new { id = item.c_id }) |
+        @Html.ActionLink("ลบ", "Delete", new { id = item.c_id })
+    </td>
+</tr>
+    }
+
+</table>

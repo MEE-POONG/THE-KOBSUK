@@ -12,24 +12,22 @@ using KOBSUK.Models;
 
 namespace KOBSUK.Controllers
 {
-    public class ProductTypeFormPageController : Controller
+    public class ProductFromPageController : Controller
     {
         private KOBSUKDBEntities db = new KOBSUKDBEntities();
 
-        // GET: ProductTypeFormPage
-        public async Task<ActionResult> Index(string search)
+        // GET: ProductFromPage
+        public async Task<ActionResult> Index()
         {
-            var last_id = await db.Types.OrderByDescending(x => x.t_id).Take(1).ToListAsync();
-            ViewBag.last_id = last_id.Count() > 0 ? "T" + (int.Parse(last_id[0].t_id.Remove(0, 1)) + 1).ToString().PadLeft(4, '0') : "T0001";
+            var last_id = await db.Products.OrderByDescending(x => x.t_id).Take(1).ToListAsync();
+            ViewBag.last_id = last_id.Count() > 0 ? "P" + (int.Parse(last_id[0].t_id.Remove(0, 1)) + 1).ToString().PadLeft(4, '0') : "P0001";
 
-            if (search == null)
-            {
-                return View(await db.Types.ToListAsync());
-            } 
-            else
-            {
-                return View(await db.Types.Where(x => x.t_name.Contains(search)).ToListAsync());
-            }
+
+            ViewBag.t_id = new SelectList(db.Types, "t_id", "t_name");
+
+
+            var products = db.Products.Include(p => p.Type);
+            return View(await products.ToListAsync());
         }
 
 
@@ -37,112 +35,119 @@ namespace KOBSUK.Controllers
         [HttpPost]
         public async Task<ActionResult> Index(SearchClass model)
         {
-            var last_id = await db.Types.OrderByDescending(x => x.t_id).Take(1).ToListAsync();
-            ViewBag.last_id = last_id.Count() > 0 ? "T" + (int.Parse(last_id[0].t_id.Remove(0, 1)) + 1).ToString().PadLeft(4, '0') : "T0001";
+            var last_id = await db.Products.OrderByDescending(x => x.t_id).Take(1).ToListAsync();
+            ViewBag.last_id = last_id.Count() > 0 ? "P" + (int.Parse(last_id[0].t_id.Remove(0, 1)) + 1).ToString().PadLeft(4, '0') : "P0001";
+
+
+            ViewBag.t_id = new SelectList(db.Types, "t_id", "t_name");
+
 
             if (model.Search == null)
             {
-                return View(await db.Types.ToListAsync());
+                return View(await db.Products.Include(p => p.Type).ToListAsync());
             }
             else
             {
-                return View(await db.Types.Where(x => x.t_name.Contains(model.Search)).ToListAsync());
+                return View(await db.Products.Include(p => p.Type).Where(x => x.p_name.Contains(model.Search)).ToListAsync());
 
             }
 
         }
-
-        // GET: ProductTypeFormPage/Details/5
+        // GET: ProductFromPage/Details/5
         public async Task<ActionResult> Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Type type = await db.Types.FindAsync(id);
-            if (type == null)
+            Product product = await db.Products.FindAsync(id);
+            if (product == null)
             {
                 return HttpNotFound();
             }
-            return View(type);
+            return View(product);
         }
 
-        // GET: ProductTypeFormPage/Create
+        // GET: ProductFromPage/Create
         public ActionResult Create()
         {
+            ViewBag.t_id = new SelectList(db.Types, "t_id", "t_name");
             return View();
         }
 
-        // POST: ProductTypeFormPage/Create
+        // POST: ProductFromPage/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "t_id,t_name")] Type type)
+        public async Task<ActionResult> Create([Bind(Include = "p_id,t_id,p_name,p_size,p_price,p_detail")] Product product)
         {
             if (ModelState.IsValid)
             {
-                db.Types.Add(type);
+                db.Products.Add(product);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            return View(type);
+            ViewBag.t_id = new SelectList(db.Types, "t_id", "t_name", product.t_id);
+            return View(product);
         }
 
-        // GET: ProductTypeFormPage/Edit/5
+        // GET: ProductFromPage/Edit/5
         public async Task<ActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Type type = await db.Types.FindAsync(id);
-            if (type == null)
+            Product product = await db.Products.FindAsync(id);
+            if (product == null)
             {
                 return HttpNotFound();
             }
-            return View(type);
+            ViewBag.t_id = new SelectList(db.Types, "t_id", "t_name", product.t_id);
+            return View(product);
         }
 
-        // POST: ProductTypeFormPage/Edit/5
+        // POST: ProductFromPage/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "t_id,t_name")] Type type)
+        public async Task<ActionResult> Edit([Bind(Include = "p_id,t_id,p_name,p_size,p_price,p_detail")] Product product)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(type).State = EntityState.Modified;
+                db.Entry(product).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(type);
+            ViewBag.t_id = new SelectList(db.Types, "t_id", "t_name", product.t_id);
+            return View(product);
         }
 
-        // GET: ProductTypeFormPage/Delete/5
+        // GET: ProductFromPage/Delete/5
         public async Task<ActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Type type = await db.Types.FindAsync(id);
-            if (type == null)
+            Product product = await db.Products.FindAsync(id);
+            if (product == null)
             {
                 return HttpNotFound();
             }
-            return View(type);
+            return View(product);
         }
 
-        // POST: ProductTypeFormPage/Delete/5
+        // POST: ProductFromPage/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            Type type = await db.Types.FindAsync(id);
-            db.Types.Remove(type);
+            Product product = await db.Products.FindAsync(id);
+            db.Products.Remove(product);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
